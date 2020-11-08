@@ -10,23 +10,23 @@ ucore for riscv32 is a porting of [ucore_os_lab](https://github.com/chyyuu/ucore
 
 Install prebuilt RISC‑V
 GCC Toolchain from SiFive:
-* [Ubuntu](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14.tar.gz)
-* [macOS](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-apple-darwin.tar.gz)
+* [Ubuntu](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2020.04.0-x86_64-linux-ubuntu14.tar.gz)
+* [macOS](https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2020.04.0-x86_64-apple-darwin.tar.gz)
 
 ```bash
 $ export RISCV=/path/to/install/riscv/toolchain
 $ export PATH=$RISCV/bin:$PATH
 ```
 
-### 2. QEMU
+### 2. QEMU >= 4.0.0
 
 Linux: build from source
 
 ```shell
 $ sudo apt install libgtk-3-dev libsdl2-dev
-$ wget https://download.qemu.org/qemu-4.0.0.tar.xz 
-$ tar xJf qemu-4.0.0.tar.xz > /dev/null
-$ cd qemu-4.0.0
+$ wget https://download.qemu.org/qemu-5.1.0.tar.xz 
+$ tar xJf qemu-5.1.0.tar.xz > /dev/null
+$ cd qemu-5.1.0
 $ ./configure --target-list=riscv32-softmmu
 $ make
 $ cp riscv32-softmmu/qemu-system-riscv32 $RISCV/bin
