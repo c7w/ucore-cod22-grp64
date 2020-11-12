@@ -31,7 +31,7 @@ HOSTCFLAGS	:= -Wall -O2
 GDB		:= $(GCCPREFIX)gdb
 
 CC		:= $(GCCPREFIX)gcc
-CFLAGS  := -march=rv32ima -mabi=ilp32
+CFLAGS  := -march=rv32i -mabi=ilp32
 CFLAGS  += -mcmodel=medany -O2 -std=gnu99 -Wno-unused
 CFLAGS	+= -fno-builtin -Wall -nostdinc $(DEFS)
 CFLAGS	+= -fno-stack-protector -ffunction-sections -fdata-sections
@@ -121,7 +121,7 @@ USER_BINS += $$(__user_bin__)
 $$(__user_bin__): tools/user.ld
 $$(__user_bin__): $$(UOBJS)
 $$(__user_bin__): $(1) | $$$$(dir $$$$@)
-	$(V)$(LD) $(LDFLAGS) -T tools/user.ld -o $$@ $$(UOBJS) $(1)
+	$(V)$(LD) $(LDFLAGS) -T tools/user.ld -o $$@ $$(UOBJS) $(1) libgcc.a
 	@$(OBJDUMP) -S $$@ > $$(call cgtype,$$<,o,asm)
 	@$(OBJDUMP) -t $$@ | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$$$/d' > $$(call cgtype,$$<,o,sym)
 endef
@@ -237,7 +237,7 @@ $(kernel): tools/kernel.ld
 
 $(kernel): $(KOBJS) $(SWAPIMG) $(SFSIMG)
 	@echo + ld $@
-	$(V)$(LD) $(LDFLAGS) -T tools/kernel.ld -o $@ $(KOBJS) --format=binary $(SWAPIMG) $(SFSIMG) --format=elf32-littleriscv
+	$(V)$(LD) $(LDFLAGS) -T tools/kernel.ld -o $@ $(KOBJS) libgcc.a --format=binary $(SWAPIMG) $(SFSIMG) --format=elf32-littleriscv
 	@$(OBJDUMP) -S $@ > $(call asmfile,kernel)
 	@$(OBJDUMP) -t $@ | $(SED) '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $(call symfile,kernel)
 

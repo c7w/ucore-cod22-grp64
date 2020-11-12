@@ -58,7 +58,8 @@ static inline bool test_and_clear_bit(int nr, volatile void *addr)
  * restricted to acting on a single-word quantity.
  * */
 static inline void set_bit(int nr, volatile void *addr) {
-    __op_bit(or, __NOP, nr, ((volatile unsigned long *)addr));
+    *(volatile int *)addr |= 1 << nr;
+    // __op_bit(or, __NOP, nr, ((volatile unsigned long *)addr));
 }
 
 /* *
@@ -67,7 +68,8 @@ static inline void set_bit(int nr, volatile void *addr) {
  * @addr:   the address to start counting from
  * */
 static inline void clear_bit(int nr, volatile void *addr) {
-    __op_bit(and, __NOT, nr, ((volatile unsigned long *)addr));
+    *(volatile int *)addr &= ~(1 << nr);
+    // __op_bit(and, __NOT, nr, ((volatile unsigned long *)addr));
 }
 
 /* *
@@ -76,7 +78,8 @@ static inline void clear_bit(int nr, volatile void *addr) {
  * @addr:   the address to start counting from
  * */
 static inline void change_bit(int nr, volatile void *addr) {
-    __op_bit (xor, __NOP, nr, ((volatile unsigned long *)addr));
+    *(volatile int *)addr ^= 1 << nr;
+    // __op_bit (xor, __NOP, nr, ((volatile unsigned long *)addr));
 }
 
 /* *
@@ -94,7 +97,10 @@ static inline bool test_bit(int nr, volatile void *addr) {
  * @addr:   the address to count from
  * */
 static inline bool test_and_set_bit(int nr, volatile void *addr) {
-    return __test_and_op_bit(or, __NOP, nr, ((volatile unsigned long *)addr));
+    bool ret = test_bit(nr, addr);
+    set_bit(nr, addr);
+    return ret;
+    // return __test_and_op_bit(or, __NOP, nr, ((volatile unsigned long *)addr));
 }
 
 /* *
@@ -103,7 +109,10 @@ static inline bool test_and_set_bit(int nr, volatile void *addr) {
  * @addr:   the address to count from
  * */
 static inline bool test_and_clear_bit(int nr, volatile void *addr) {
-    return __test_and_op_bit(and, __NOT, nr, ((volatile unsigned long *)addr));
+    bool ret = test_bit(nr, addr);
+    clear_bit(nr, addr);
+    return ret;
+    // return __test_and_op_bit(and, __NOT, nr, ((volatile unsigned long *)addr));
 }
 
 #endif /* !__LIBS_ATOMIC_H__ */
