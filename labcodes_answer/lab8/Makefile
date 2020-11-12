@@ -250,7 +250,12 @@ UCOREIMG	:= $(call totarget,ucore.img)
 $(UCOREIMG): $(kernel)
 	$(OBJCOPY) $(kernel) --strip-all -O binary $@
 
+RBLIMG		:= $(call totarget,rbl.img)
+$(RBLIMG): rbl
+	$(OBJCOPY) $^ --strip-all -O binary $@
+
 $(call create_target,ucore.img)
+$(call create_target,rbl.img)
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -280,9 +285,10 @@ TARGETS: $(TARGETS)
 QEMUOPTS = -hda $(UCOREIMG) -drive file=$(SWAPIMG),media=disk,cache=writeback -drive file=$(SFSIMG),media=disk,cache=writeback 
 
 .PHONY: qemu spike
-qemu: $(UCOREIMG) $(SWAPIMG) $(SFSIMG)
+qemu: $(UCOREIMG) $(SWAPIMG) $(SFSIMG) $(RBLIMG)
 	$(V)$(QEMU) \
 		-machine virt \
+		-bios $(RBLIMG) \
 		-device loader,addr=0x80400000,file=$(UCOREIMG) \
 		-nographic
 
