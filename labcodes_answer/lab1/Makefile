@@ -31,7 +31,7 @@ HOSTCFLAGS	:= -Wall -O2
 GDB		:= $(GCCPREFIX)gdb
 
 CC		:= $(GCCPREFIX)gcc
-CFLAGS  := -march=rv32ima -mabi=ilp32
+CFLAGS  := -march=rv32i -mabi=ilp32
 CFLAGS  += -mcmodel=medany -std=gnu99 -Wno-unused -Werror
 CFLAGS	+= -fno-builtin -Wall -O2 -nostdinc $(DEFS)
 CFLAGS	+= -fno-stack-protector -ffunction-sections -fdata-sections
@@ -122,7 +122,7 @@ $(kernel): tools/kernel.ld
 
 $(kernel): $(KOBJS)
 	@echo + ld $@
-	$(V)$(LD) $(LDFLAGS) -T tools/kernel.ld -o $@ $(KOBJS)
+	$(V)$(LD) $(LDFLAGS) -T tools/kernel.ld -o $@ $(KOBJS) ../lab8/libgcc.a
 	@$(OBJDUMP) -S $@ > $(call asmfile,kernel)
 	@$(OBJDUMP) -t $@ | $(SED) '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $(call symfile,kernel)
 
@@ -132,10 +132,15 @@ $(call create_target,kernel)
 # create ucore.img
 UCOREIMG	:= $(call totarget,ucore.img)
 
+RBLIMG		:= $(call totarget,rbl.img)
+$(RBLIMG): ../lab8/rbl
+	$(OBJCOPY) $^ --strip-all -O binary $@
+
 $(UCOREIMG): $(kernel)
 	$(OBJCOPY) $(kernel) --strip-all -O binary $@
 
 $(call create_target,ucore.img)
+$(call create_target,rbl.img)
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -159,9 +164,10 @@ TARGETS: $(TARGETS)
 .DEFAULT_GOAL := TARGETS
 
 .PHONY: qemu spike
-qemu: $(UCOREIMG) $(SWAPIMG) $(SFSIMG)
+qemu: $(UCOREIMG) $(SWAPIMG) $(SFSIMG) $(RBLIMG)
 	$(V)$(QEMU) \
 		-machine virt \
+		-bios $(RBLIMG) \
 		-device loader,addr=0x80400000,file=$(UCOREIMG) \
 		-nographic
 
