@@ -975,7 +975,7 @@ kernel_execve(const char *name, const char **argv) {
     }
     // OpenSBI will not delegate Supervisor Ecall to S-Mode
     // So we have to simulate a trap
-    write_csr(sstatus, read_csr(sstatus) | SSTATUS_SPP);    // sstatus.SPP = S-Mode
+    write_csr(sstatus, read_csr(sstatus) | SSTATUS_SPP & ~SSTATUS_SIE);    // sstatus.SPP = S-Mode
     write_csr(scause, CAUSE_SUPERVISOR_ECALL);              // scause = SupervisorEcall
     asm volatile(
         "la a0, 1f\n"
