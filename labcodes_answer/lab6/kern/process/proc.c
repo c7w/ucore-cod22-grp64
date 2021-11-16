@@ -831,7 +831,7 @@ kernel_execve(const char *name, unsigned char *binary, size_t size) {
         "mv %0, a0"         // ret = a0
         : "=r"(ret)
         : "i"(SYS_exec), "r"(name), "r"(len), "r"(binary), "r"(size)
-        : "memory");
+        : "a0", "a1", "a2", "a3",  "a4", "memory");
     return ret;
 }
 

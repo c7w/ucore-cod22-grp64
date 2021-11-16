@@ -245,6 +245,7 @@
 static inline void
 lcr3(unsigned int cr3) {
     write_csr(sptbr, SATP32_MODE | (cr3 >> RISCV_PGSHIFT));
+    __asm__ __volatile__ ("sfence.vma");
 }
 
 #endif

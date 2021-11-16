@@ -989,7 +989,7 @@ kernel_execve(const char *name, const char **argv) {
         "mv %0, a0"         // ret = a0
         : "=r"(ret)
         : "i"(SYS_exec), "r"(name), "r"(argc), "r"(argv)
-        : "memory");
+        : "a0", "a1", "a2", "a3", "memory");
     return ret;
 }
 

@@ -122,6 +122,8 @@
 #define PRV_H 2
 #define PRV_M 3
 
+#define SATP32_MODE 0x80000000
+
 #define VM_MBARE 0
 #define VM_MBB   1
 #define VM_MBBID 2
@@ -233,7 +235,8 @@
 
 static inline void
 lcr3(unsigned int cr3) {
-    write_csr(sptbr, cr3 >> RISCV_PGSHIFT);
+    write_csr(sptbr, SATP32_MODE | (cr3 >> RISCV_PGSHIFT));
+    __asm__ __volatile__ ("sfence.vma");
 }
 
 #endif
