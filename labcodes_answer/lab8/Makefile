@@ -290,7 +290,7 @@ qemu: $(UCOREIMG) $(SWAPIMG) $(SFSIMG) $(RBLIMG)
 		-machine virt \
 		-bios $(RBLIMG) \
 		-device loader,addr=0x80400000,file=$(UCOREIMG) \
-		-nographic
+		-nographic # -gdb tcp::9000 -S
 
 spike: $(UCOREIMG) $(SWAPIMG) $(SFSIMG)
 	$(V)$(SPIKE) $(UCOREIMG)
