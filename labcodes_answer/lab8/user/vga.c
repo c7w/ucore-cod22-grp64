@@ -11,7 +11,7 @@
 #define WIDTH 100
 #define HEIGHT 75
 #define FPS 10
-#define SECOND 20
+#define SECOND 60
 #define VIDEO_LENGTH FPS * SECOND
 
 #define printf(...)                     fprintf(1, __VA_ARGS__)
