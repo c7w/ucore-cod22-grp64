@@ -33,6 +33,8 @@ void wait_for_tick(ll wait_until) {
 
 int main() {
     printf("Video is running!\n");
+
+    *(int *)(0x81003ffc) = 1;
     
     // [0, frame_cnt)
     for (int i = 0; i < VIDEO_LENGTH; i += 1) {

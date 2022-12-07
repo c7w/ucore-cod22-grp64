@@ -184,7 +184,7 @@ $(SFSROOT):
 	$(V)$(MKDIR) $@
 
 $(SFSIMG): $(SFSROOT) $(SFSBINS) | $(call totarget,mksfs)
-	$(V)dd if=/dev/zero of=$@ bs=1k count=480
+	$(V)dd if=/dev/zero of=$@ bs=1k count=960
 	@$(call totarget,mksfs) $@ $(SFSROOT)
 
 $(call create_target,sfs.img)
