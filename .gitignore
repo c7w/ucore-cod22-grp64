@@ -23,3 +23,7 @@ disk0
 setenv-rv32.sh
 .settings
 *.old
+out.flash
+rbl.S
+.vscode
+labcodes_answer/lab8/asm.S
