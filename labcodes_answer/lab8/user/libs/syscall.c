@@ -150,3 +150,8 @@ int
 sys_dup(int fd1, int fd2) {
     return syscall(SYS_dup, fd1, fd2);
 }
+
+int
+sys_color_mode(int use) {
+    return syscall(SYS_color, use);
+}

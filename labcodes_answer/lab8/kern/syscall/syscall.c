@@ -10,6 +10,7 @@
 #include <stat.h>
 #include <dirent.h>
 #include <sysfile.h>
+#include <console.h>
 
 static int
 sys_exit(uint32_t arg[]) {
@@ -157,6 +158,13 @@ sys_dup(uint32_t arg[]) {
     return sysfile_dup(fd1, fd2);
 }
 
+static int
+sys_color(uint32_t arg[]) {
+    int use = (int)arg[0];
+    _color_use(use);
+    return 0;
+}
+
 static int (*syscalls[])(uint32_t arg[]) = {
     [SYS_exit]              sys_exit,
     [SYS_fork]              sys_fork,
@@ -180,6 +188,7 @@ static int (*syscalls[])(uint32_t arg[]) = {
     [SYS_getcwd]            sys_getcwd,
     [SYS_getdirentry]       sys_getdirentry,
     [SYS_dup]               sys_dup,
+    [SYS_color]             sys_color
 };
 
 #define NUM_SYSCALLS        ((sizeof(syscalls)) / (sizeof(syscalls[0])))

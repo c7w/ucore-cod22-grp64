@@ -7,5 +7,7 @@ int cons_getc(void);
 void serial_intr(void);
 void kbd_intr(void);
 
+void _colored_use(int);
+
 #endif /* !__KERN_DRIVER_CONSOLE_H__ */
 

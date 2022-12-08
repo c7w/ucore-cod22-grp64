@@ -4,6 +4,7 @@
 #include <file.h>
 #include <error.h>
 #include <stdio.h>
+#include <syscall.h>
 #include <unistd.h>
 
 #define ll long long
@@ -11,7 +12,7 @@
 #define WIDTH 100
 #define HEIGHT 75
 #define FPS 10
-#define SECOND 60
+#define SECOND 10
 #define VIDEO_LENGTH FPS * SECOND
 
 #define printf(...)                     fprintf(1, __VA_ARGS__)
@@ -34,7 +35,7 @@ void wait_for_tick(ll wait_until) {
 int main() {
     printf("Video is running!\n");
 
-    *(int *)(0x81003ffc) = 1;
+    sys_color_mode(1);
     
     // [0, frame_cnt)
     for (int i = 0; i < VIDEO_LENGTH; i += 1) {
@@ -51,5 +52,8 @@ int main() {
         // namely 1M per 1/10 second
         wait_for_tick(curr_time + 10000000 / FPS);
     }
+
+    sys_color_mode(0);
+
     printf("vga pass.\n");
 }
