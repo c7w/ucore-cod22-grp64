@@ -175,10 +175,12 @@ uint8_t fonts[0xFF][0xF] = {
 int tail = 0;
 ll prev_time = -1;
 uint8_t m_buffer[DISPLAY_MEMORY_LEN];
-char monitor[Y_COUNT][X_COUNT];
+char monitor[Y_COUNT][X_COUNT] = {0};
 extern int enable_ft = 1;
 extern int enable_display = 1;
 int x = 0, y = 0;  // current cursor
+int last_r_tick = -1;
+
 
 #define next(x) ((x == Y_COUNT - 1) ? 0: x + 1)
 #define prev(x) ((x == 0) ? (Y_COUNT - 1) : (x - 1))
@@ -210,6 +212,10 @@ void render(uint8_t x, uint8_t y, char c) {
     // enable_ft = 0;
     // cprintf("Render (%d, %d), %c\n", x, y, c);
     // enable_ft = 1;
+
+    if (c == 0) {
+        c = ' ';
+    }
 
     for (int i = 0; i < 15; ++i) {
         uint8_t *adr = m_buffer + 50 * 15 * y + x + 50 * i;
@@ -315,9 +321,7 @@ int serial_proc_data(void) {
     return c;
 }
 
-/* serial_intr - try to feed input characters from serial port */
-void serial_intr(void) {
-    cons_intr(serial_proc_data);
+static inline void try_dislay() {
     if (enable_display) {
         ll now =  get_time();
         if (prev_time == -1) {
@@ -331,12 +335,19 @@ void serial_intr(void) {
     }
 }
 
+/* serial_intr - try to feed input characters from serial port */
+void serial_intr(void) {
+    cons_intr(serial_proc_data);
+    try_dislay();
+}
+
 /* serial_putc - print character to serial port */
 void serial_putc(int c) {
     if (c != '\b') {
         sbi_console_putchar(c);
         if (enable_ft) {
             append_c(c);
+            try_dislay();
         }
     } else {
         sbi_console_putchar('\b');
