@@ -1,3 +1,13 @@
+# uCore @ thinpad
+
+uCore modificaiton of grp64, cod-lab-2022. 
+
+- Supports 8bit-colored 200x150 VGA, 1bit-colored 400x300 VGA.
+- Map serial output to VGA display (1bit-colored)
+- VGA player on Flash (8bit-colore)
+--------
+
+
 # uCore for riscv32 : uCore OS Labs on RISCV-32 (privileged spec 1.10)
 
 ucore for riscv32 is a porting of [ucore_os_lab](https://github.com/chyyuu/ucore_os_lab.git) to RISC-V architecture (privileged spec 1.10). It's built on top of the [OpenSBI](https://github.com/riscv/opensbi), a supervisor execution environment for RISC-V systems.
